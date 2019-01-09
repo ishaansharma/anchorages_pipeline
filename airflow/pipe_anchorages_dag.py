@@ -65,29 +65,29 @@ def build_port_events_dag(dag_id, schedule_interval='@daily', extra_default_args
 
         # Note: task_id must use '-' instead of '_' because it gets used to create the dataflow job name, and
         # only '-' is allowed
-        port_events = DataFlowDirectRunnerOperator(
-            task_id='port-events',
-            pool='dataflow',
-            py_file=python_target,
-            options=dict(
-                startup_log_file=pp.join(Variable.get('DATAFLOW_WRAPPER_LOG_PATH'),
-                                         'pipe_anchorages/port-events.log'),
-                command='{docker_run} {docker_image} port_events'.format(**config),
-                project=config['project_id'],
-                runner='{dataflow_runner}'.format(**config),
-                start_date=start_date,
-                end_date=end_date,
-                anchorage_table='{project_id}:{anchorage_table}'.format(**config),
-                input_table='{source_dataset}.{source_table}'.format(**config),
-                output_table='{pipeline_dataset}.{port_events_table}'.format(**config),
-                temp_location='gs://{temp_bucket}/dataflow_temp'.format(**config),
-                staging_location='gs://{temp_bucket}/dataflow_staging'.format(**config),
-                max_num_workers="100",
-                disk_size_gb="50",
-                requirements_file='./requirements.txt',
-                setup_file='./setup.py'
-            )
-        )
+        # port_events = DataFlowDirectRunnerOperator(
+        #     task_id='port-events',
+        #     pool='dataflow',
+        #     py_file=python_target,
+        #     options=dict(
+        #         startup_log_file=pp.join(Variable.get('DATAFLOW_WRAPPER_LOG_PATH'),
+        #                                  'pipe_anchorages/port-events.log'),
+        #         command='{docker_run} {docker_image} port_events'.format(**config),
+        #         project=config['project_id'],
+        #         runner='{dataflow_runner}'.format(**config),
+        #         start_date=start_date,
+        #         end_date=end_date,
+        #         anchorage_table='{project_id}:{anchorage_table}'.format(**config),
+        #         input_table='{source_dataset}.{source_table}'.format(**config),
+        #         output_table='{pipeline_dataset}.{port_events_table}'.format(**config),
+        #         temp_location='gs://{temp_bucket}/dataflow_temp'.format(**config),
+        #         staging_location='gs://{temp_bucket}/dataflow_staging'.format(**config),
+        #         max_num_workers="100",
+        #         disk_size_gb="50",
+        #         requirements_file='./requirements.txt',
+        #         setup_file='./setup.py'
+        #     )
+        # )
 
         ensure_creation_tables = BigQueryCreateEmptyTableOperator(
             task_id='ensure_port_events_creation_tables',
@@ -107,7 +107,8 @@ def build_port_events_dag(dag_id, schedule_interval='@daily', extra_default_args
             end_date_str=end_date
         )
 
-        dag >> source_exists >> port_events >> ensure_creation_tables
+        # dag >> source_exists >> port_events >> ensure_creation_tables
+        dag >> source_exists >> ensure_creation_tables
 
         return dag
 
@@ -148,29 +149,29 @@ def build_port_visits_dag(dag_id, schedule_interval='@daily', extra_default_args
 
         # Note: task_id must use '-' instead of '_' because it gets used to create the dataflow job name, and
         # only '-' is allowed
-        port_visits = DataFlowDirectRunnerOperator(
-            task_id='port-visits',
-            pool='dataflow',
-            py_file=python_target,
-            options=dict(
-                startup_log_file=pp.join(Variable.get('DATAFLOW_WRAPPER_LOG_PATH'),
-                                         'pipe_anchorages/port-visits.log'),
-                command='{docker_run} {docker_image} port_visits'.format(**config),
-                project=config['project_id'],
-                runner='{dataflow_runner}'.format(**config),
-                start_date=start_date,
-                end_date=end_date,
-                events_table='{project_id}:{pipeline_dataset}.{port_events_table}'.format(**config),
-                start_padding='{port_visits_start_padding}'.format(**config),
-                output_table='{pipeline_dataset}.{port_visits_table}'.format(**config),
-                temp_location='gs://{temp_bucket}/dataflow_temp'.format(**config),
-                staging_location='gs://{temp_bucket}/dataflow_staging'.format(**config),
-                max_num_workers="100",
-                disk_size_gb="50",
-                requirements_file='./requirements.txt',
-                setup_file='./setup.py'
-            )
-        )
+        # port_visits = DataFlowDirectRunnerOperator(
+        #     task_id='port-visits',
+        #     pool='dataflow',
+        #     py_file=python_target,
+        #     options=dict(
+        #         startup_log_file=pp.join(Variable.get('DATAFLOW_WRAPPER_LOG_PATH'),
+        #                                  'pipe_anchorages/port-visits.log'),
+        #         command='{docker_run} {docker_image} port_visits'.format(**config),
+        #         project=config['project_id'],
+        #         runner='{dataflow_runner}'.format(**config),
+        #         start_date=start_date,
+        #         end_date=end_date,
+        #         events_table='{project_id}:{pipeline_dataset}.{port_events_table}'.format(**config),
+        #         start_padding='{port_visits_start_padding}'.format(**config),
+        #         output_table='{pipeline_dataset}.{port_visits_table}'.format(**config),
+        #         temp_location='gs://{temp_bucket}/dataflow_temp'.format(**config),
+        #         staging_location='gs://{temp_bucket}/dataflow_staging'.format(**config),
+        #         max_num_workers="100",
+        #         disk_size_gb="50",
+        #         requirements_file='./requirements.txt',
+        #         setup_file='./setup.py'
+        #     )
+        # )
 
         ensure_creation_tables = BigQueryCreateEmptyTableOperator(
             task_id='ensure_port_visits_creation_tables',
@@ -202,7 +203,8 @@ def build_port_visits_dag(dag_id, schedule_interval='@daily', extra_default_args
             end_date_str=end_date
         )
 
-        dag >> source_exists >> port_visits >> ensure_creation_tables
+        # dag >> source_exists >> port_visits >> ensure_creation_tables
+        dag >> source_exists >> ensure_creation_tables
 
         return dag
 
