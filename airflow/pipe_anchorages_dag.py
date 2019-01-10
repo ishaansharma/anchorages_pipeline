@@ -104,7 +104,8 @@ def build_port_events_dag(dag_id, schedule_interval='@daily', extra_default_args
                 {"name": "event_type", "type": "STRING", "mode": "REQUIRED"}
             ],
             start_date_str=start_date,
-            end_date_str=end_date
+            end_date_str=end_date,
+            time_partitioning={'requirePartitionFilter': True, 'type': 'DAY'}
         )
 
         # dag >> source_exists >> port_events >> ensure_creation_tables
