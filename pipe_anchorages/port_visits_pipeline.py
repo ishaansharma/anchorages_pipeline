@@ -95,7 +95,7 @@ def run(options):
                 'type': 'DAY',
                 'field': 'end_timestamp'
             }, 'clustering': {
-                'fields': ['visit_id', 'vessel_id', 'ssvid', 'start_timestamp', 'end_timestamp']
+                'fields': ['visit_id', 'vessel_id', 'ssvid', 'start_timestamp']
             }})
 
 
