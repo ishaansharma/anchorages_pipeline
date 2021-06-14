@@ -92,10 +92,9 @@ def run(options):
         create_disposition=io.BigQueryDisposition.CREATE_IF_NEEDED,
         additional_bq_parameters={
             'timePartitioning': {
-                'type': 'DAY',
-                'field': 'end_timestamp'
+                'type': 'DAY'
             }, 'clustering': {
-                'fields': ['confidence', 'vessel_id', 'ssvid', 'start_timestamp']
+                'fields': ['confidence', 'vessel_id', 'ssvid', 'end_timestamp']
             }})
 
 
